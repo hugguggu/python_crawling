@@ -1,6 +1,7 @@
 from pickle import NONE
 from webbrowser import get
 import openpyxl
+from openpyxl.styles import Font
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -19,13 +20,14 @@ from selenium.webdriver.common.action_chains import ActionChains
 
 options = webdriver.ChromeOptions()
 options.add_argument("--disable-blink-features=AutomationControlled")
-# options.add_argument('headless')
-# options.add_argument('window-size=1920x1080')
+options.add_argument('headless')
+options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
-# options.add_argument("lang=ko_KR")
+options.add_argument("lang=ko_KR")
 options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
+options.add_argument("Accept=text/html,application/xhtml+xml,application/xml;\q=0.9,imgwebp,*/*;q=0.8")
 # options.add_argument("proxy-server=localhost:8080")
-driver = webdriver.Chrome('C:/chromedriver.exe', options=options)
+driver = webdriver.Chrome('./chromedriver.exe', options=options)
 # driver = webdriver.Chrome('C:/chromedriver.exe')
 
 # url = 'https://www.etf.com/etfanalytics/etf-finder'
@@ -40,22 +42,27 @@ driver.maximize_window()
 res = 0
 while res < 1:
         try:
+                time.sleep(2)
                 element = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, "edit-name")))
                 element.click()
                 element.send_keys('hugguggu@gmail.com')
 
+                time.sleep(1)
                 element = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, "edit-pass")))
                 element.click()
                 element.send_keys('Rodroddl01!')
 
+                time.sleep(2)
                 element = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, "edit-submit")))
                 element.click()
-                
+                print('log in ok\n')
                 res = 1
         except:
                 res = 0
+                print('log in fail\n')
 
 res = 0
+
 while res < 1:
         try:
 
@@ -158,6 +165,10 @@ hover.perform()
 
 
 element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'finderTable')))
+
+thead = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.TAG_NAME, 'thead')))
+header = thead.find_elements(By.TAG_NAME, 'label')
+
 tbody = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.TAG_NAME, 'tbody')))
 rows = tbody.find_elements(By.TAG_NAME, 'tr')
 
@@ -165,20 +176,30 @@ rows = tbody.find_elements(By.TAG_NAME, 'tr')
 #     body=value.find_elements_by_tag_name("td")[1]
 #     print(body.text)
 
+
+print(' writing')
 # 엑셀 파일 생성
 workbook = openpyxl.Workbook()
 
 # 엑셀 워크시트 생성
 # sheet = workbook.create_sheet("test")
 sheet = workbook.worksheets[0]
+ft = Font(bold=True)
+for idx, tag in enumerate(header):
+        sheet.cell(row = 1, column = idx + 1).value = tag.text
+        sheet.cell(row = 1, column = idx + 1).font = ft
 
 for row_idx, row_val in enumerate(rows):
         col = row_val.find_elements_by_tag_name("td")
-        # print(len(body))
+        print(f'write row : {row_idx + 1}')
         for td_idx, col_val in enumerate(col):
                 # print(col_val.text, end=" ")
-                sheet.cell(row = row_idx + 1, column = td_idx + 1).value = col_val.text
-        # print("")
+                # sheet.cell(row = row_idx + 2, column = td_idx + 1).value = col_val.text
+                sheet.cell(row = row_idx + 2, column = td_idx + 1).value = col_val.text
+                if td_idx == 0:
+                        sheet.cell(row = row_idx + 2, column = td_idx + 1).hyperlink = 'http://www.etf.com/{}'.format(col_val.text)
+               
+#         # print("")
         
 workbook.save(r'etf_com.xlsx')
 
