@@ -191,7 +191,7 @@ for idx, tag in enumerate(header):
 
 for row_idx, row_val in enumerate(rows):
         col = row_val.find_elements_by_tag_name("td")
-        print(f'write row : {row_idx + 1}')
+        print(f'row : {row_idx + 1}')
         for td_idx, col_val in enumerate(col):
                 # print(col_val.text, end=" ")
                 # sheet.cell(row = row_idx + 2, column = td_idx + 1).value = col_val.text
