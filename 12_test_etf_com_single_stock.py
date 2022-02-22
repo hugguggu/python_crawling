@@ -8,6 +8,11 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.keys import Keys
+import pyautogui
+
+## 파이썬 기본 입력 API
+# keyword = input("keywords??  ")
 
 # # url = 'https://www.etf.com/modal_forms/nojs/login?destination=//'
 # url = 'https://www.etf.com'
@@ -17,10 +22,12 @@ from selenium.webdriver.common.action_chains import ActionChains
 # wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, 'loginLnk')))
 # print(browser.find_element_by_id('edit-name').text)
 
+keyword = pyautogui.prompt("Input Ticker")
+keyword = keyword.replace(" ", "")
 
 options = webdriver.ChromeOptions()
 options.add_argument("--disable-blink-features=AutomationControlled")
-options.add_argument('headless')
+# options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 options.add_argument("lang=ko_KR")
@@ -99,7 +106,7 @@ while res < 1:
                 driver.execute_script("arguments[0].scrollIntoView(true);", element)
 
                 # /html/body/div[7]/section/div/div[3]/section/div/div/div/div/div[2]/section[2]/div[2]/section[2]/div[1]/div/div[3]/button
-                element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="results_display"]/div/div[4]/button')))
+                element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="results_display"]/div/div[2]/button')))
                 hover = ActionChains(driver).move_to_element(element).click()
                 hover.perform()
 
@@ -157,7 +164,6 @@ for idx in range (1, 59, 1):
                 hover = ActionChains(driver).move_to_element(element).click()
                 hover.perform()
                 print(' change')        
-
 # checking end
 
 # close custom tab
@@ -171,19 +177,20 @@ hover.perform()
 # close custom tab end
 
 
-# sorting
-div_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="results"]/div/div[2]')))
+# find
+div_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="search"]')))
 hover = ActionChains(driver).move_to_element(div_element)
 hover.perform()
 driver.execute_script("arguments[0].scrollIntoView(true);", div_element)
 
-div_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'custom_LaunchDate')))
-hover = ActionChains(driver).move_to_element(div_element).click()
+div_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, '//*[@id="search"]')))
+hover = ActionChains(driver)
+hover.move_to_element(div_element)
+hover.click()
+hover.send_keys(f'{keyword}')
+hover.send_keys(Keys.ENTER)
 hover.perform()
-time.sleep(1)
-hover = ActionChains(driver).move_to_element(div_element).click()
-hover.perform()
-# sorting end
+# find end
 
 # write excel
 element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.ID, 'finderTable')))
@@ -223,7 +230,7 @@ for row_idx, row_val in enumerate(rows):
                
 #         # print("")
         
-workbook.save(r'etf_com.xlsx')
+workbook.save(F'{keyword}.xlsx')
 
 driver.quit()
 
