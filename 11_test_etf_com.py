@@ -24,7 +24,7 @@ options.add_argument('headless')
 options.add_argument('window-size=1920x1080')
 options.add_argument("disable-gpu")
 options.add_argument("lang=ko_KR")
-options.add_argument("user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
+options.add_argument("user-agent=Mozilla/5.0 (M acintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36")
 options.add_argument("Accept=text/html,application/xhtml+xml,application/xml;\q=0.9,imgwebp,*/*;q=0.8")
 # options.add_argument("proxy-server=localhost:8080")
 driver = webdriver.Chrome('./chromedriver.exe', options=options)
@@ -35,7 +35,7 @@ url = 'https://www.etf.com/modal_forms/nojs/login?destination=/'
 # url = 'https://www.etf.com'
 driver.get(url)
 driver.maximize_window()
- 
+
 # element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, '//*[@id="table-tabs"]/li[7]')))
 # element.send_keys(Keys.ENTER)
 
