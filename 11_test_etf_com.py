@@ -66,17 +66,17 @@ res = 0
 while res < 1:
         try:
 
-                div_element = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, 'main-navigation')))
+                div_element = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, 'menu-nav')))
                 hover = ActionChains(driver).move_to_element(div_element)
                 hover.perform()
 
                 # driver.execute_script("window.scrollTo(0, Y)") 
-
-                button = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="main-navigation"]/ul/li[1]')))
+                # //*[@id="menu-nav"]/li[1]/span/div
+                button = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="menu-nav"]/li[1]/span/div')))
                 hover = ActionChains(driver).move_to_element(button)
                 hover.perform()
-
-                element = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="main-navigation"]/ul/li[1]/ul/li[1]')))
+                # //*[@id="menu-nav"]/li[1]/ul/li[1]/a
+                element = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//*[@id="menu-nav"]/li[1]/ul/li[1]/a')))
                 hover = ActionChains(driver).move_to_element(element).click()
                 hover.perform()
 
